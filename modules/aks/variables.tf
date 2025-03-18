@@ -1,7 +1,7 @@
 variable "resource_group_name" {
   description = "Nome do grupo de recursos onde o cluster AKS será criado"
   type        = string
-  default     = "aks"
+  default     = "akscluster"
 }
 
 variable "location" {
