@@ -72,3 +72,21 @@ variable "subnet_address_prefixes" {
   type        = list(string)
   default     = ["10.0.1.0/24"]
 }
+
+variable "resource_group_name" {
+  description = "Nome do grupo de recursos para o AKS"
+  type        = string
+  default     = "servers"
+}
+
+variable "location" {
+  description = "Localização para os recursos Azure"
+  type        = string
+  default     = "eastus"
+}
+
+variable "cluster_name" {
+  description = "Nome do cluster AKS"
+  type        = string
+  default     = "aks-cluster"
+}
