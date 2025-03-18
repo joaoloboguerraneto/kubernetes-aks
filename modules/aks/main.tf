@@ -14,15 +14,11 @@ resource "azurerm_kubernetes_cluster" "aks" {
     orchestrator_version = var.kubernetes_version
     
     os_disk_size_gb     = var.os_disk_size_gb
-    enable_auto_scaling = var.enable_auto_scaling
     min_count           = var.min_count
     max_count           = var.max_count
     max_pods            = 110
     type                = "VirtualMachineScaleSets"
     
-    # Configurações adicionais de segurança
-    enable_node_public_ip = false
-    enable_host_encryption = true
   }
 
   identity {
@@ -33,7 +29,6 @@ resource "azurerm_kubernetes_cluster" "aks" {
     network_plugin     = var.network_plugin
     load_balancer_sku  = var.load_balancer_sku
     network_policy     = var.network_policy
-    docker_bridge_cidr = var.docker_bridge_cidr
     service_cidr       = var.service_cidr
     dns_service_ip     = var.dns_service_ip
   }
