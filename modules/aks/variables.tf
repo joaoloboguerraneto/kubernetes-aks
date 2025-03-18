@@ -1,16 +1,19 @@
 variable "resource_group_name" {
   description = "Nome do grupo de recursos onde o cluster AKS será criado"
   type        = string
+  default     = "servers"
 }
 
 variable "location" {
   description = "Localização do Azure onde os recursos serão criados"
   type        = string
+  default     = "East US"
 }
 
 variable "cluster_name" {
   description = "Nome do cluster AKS"
   type        = string
+  default     = "aks-wolf"
 }
 
 variable "dns_prefix" {
@@ -69,6 +72,7 @@ variable "ssh_public_key" {
 variable "subnet_id" {
   description = "ID da subnet onde o AKS será implantado"
   type        = string
+  default     = "Servidor01-vnet"
 }
 
 variable "service_cidr" {
