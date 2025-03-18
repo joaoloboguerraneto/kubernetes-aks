@@ -42,29 +42,29 @@ jobs:
 
     - name: Terraform Init
       run: |
-        cd terraform
+        cd modules/aks
         terraform init
       
     - name: Terraform Format
       run: |
-        cd terraform
+        cd modules/aks
         terraform fmt -check
 
     - name: Terraform Plan
       run: |
-        cd terraform
+        cd modules/aks
         terraform plan -input=false -var="ssh_public_key=${{ env.SSH_PUBLIC_KEY }}"
       
     - name: Terraform Apply
       if: github.ref == 'refs/heads/main'
       run: |
-        cd terraform
+        cd modules/aks
         terraform apply -auto-approve -input=false -var="ssh_public_key=${{ env.SSH_PUBLIC_KEY }}"
     
     - name: Save AKS Credentials
       if: github.ref == 'refs/heads/main'
       run: |
-        cd terraform
+        cd modules/aks
         echo "resource_group=$(terraform output -raw resource_group_name)" >> $GITHUB_OUTPUT
         echo "cluster_name=$(terraform output -raw kubernetes_cluster_name)" >> $GITHUB_OUTPUT
         echo "acr_login_server=$(terraform output -raw acr_login_server)" >> $GITHUB_OUTPUT
