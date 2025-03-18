@@ -1,21 +1,3 @@
-variable "resource_group_name" {
-  description = "Nome do grupo de recursos para o AKS"
-  type        = string
-  default     = "endpoint-monitor-rg"
-}
-
-variable "location" {
-  description = "Localização para os recursos Azure"
-  type        = string
-  default     = "eastus"
-}
-
-variable "cluster_name" {
-  description = "Nome do cluster AKS"
-  type        = string
-  default     = "endpoint-monitor-aks"
-}
-
 variable "kubernetes_version" {
   description = "Versão do Kubernetes"
   type        = string
