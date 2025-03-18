@@ -66,11 +66,6 @@ output "cluster_ca_certificate" {
   sensitive   = true
 }
 
-output "api_server_authorized_ip_ranges" {
-  description = "Ranges de IP autorizados para o servidor API"
-  value       = azurerm_kubernetes_cluster.aks.api_server_authorized_ip_ranges
-}
-
 output "node_resource_group" {
   description = "Nome do grupo de recursos que contém os recursos do nó do AKS"
   value       = azurerm_kubernetes_cluster.aks.node_resource_group
