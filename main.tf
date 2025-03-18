@@ -120,3 +120,17 @@ resource "azurerm_role_assignment" "aks_to_acr" {
   scope                            = azurerm_container_registry.acr.id
   skip_service_principal_aad_check = true
 }
+
+resource "azurerm_virtual_network" "aks_vnet" {
+  name                = "${var.cluster_name}-vnet"
+  address_space       = ["10.0.0.0/16"]
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+}
+
+resource "azurerm_subnet" "aks_subnet" {
+  name                 = "${var.cluster_name}-subnet"
+  resource_group_name  = azurerm_resource_group.rg.name
+  virtual_network_name = azurerm_virtual_network.aks_vnet.name
+  address_prefixes     = ["10.0.1.0/24"]
+}

@@ -20,17 +20,17 @@ resource "azurerm_kubernetes_cluster" "aks" {
   tags                = var.tags
 
   default_node_pool {
-    name                = "default"
-    node_count          = var.node_count
-    vm_size             = var.node_size
-    vnet_subnet_id      = var.subnet_id
-    orchestrator_version = var.kubernetes_version
+    name                  = "default"
+    node_count            = var.node_count
+    vm_size               = var.node_size
+    vnet_subnet_id        = azurerm_subnet.aks_subnet.id
+    orchestrator_version  = var.kubernetes_version
     
-    os_disk_size_gb     = var.os_disk_size_gb
-    min_count           = var.min_count
-    max_count           = var.max_count
-    max_pods            = 110
-    type                = "VirtualMachineScaleSets"
+    os_disk_size_gb       = var.os_disk_size_gb
+    min_count             = var.min_count
+    max_count             = var.max_count
+    max_pods              = 110
+    type                  = "VirtualMachineScaleSets"
     
   }
 
@@ -116,4 +116,18 @@ resource "azurerm_monitor_diagnostic_setting" "aks" {
       days    = 30
     }
   }
+}
+
+resource "azurerm_virtual_network" "aks_vnet" {
+  name                = "${var.cluster_name}-vnet"
+  address_space       = ["10.0.0.0/16"]
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+}
+
+resource "azurerm_subnet" "aks_subnet" {
+  name                 = "${var.cluster_name}-subnet"
+  resource_group_name  = azurerm_resource_group.rg.name
+  virtual_network_name = azurerm_virtual_network.aks_vnet.name
+  address_prefixes     = ["10.0.1.0/24"]
 }
