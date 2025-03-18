@@ -58,7 +58,7 @@ variable "subnet_address_prefixes" {
 variable "resource_group_name" {
   description = "Nome do grupo de recursos para o AKS"
   type        = string
-  default     = "servers"
+  default     = "aks"
 }
 
 variable "location" {
