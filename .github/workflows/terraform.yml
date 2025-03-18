@@ -60,9 +60,9 @@ jobs:
       if: github.ref == 'refs/heads/main'
       run: |
         cd terraform
-        echo "::set-output name=resource_group::$(terraform output -raw resource_group_name)"
-        echo "::set-output name=cluster_name::$(terraform output -raw kubernetes_cluster_name)"
-        echo "::set-output name=acr_login_server::$(terraform output -raw acr_login_server)"
+        echo "resource_group=$(terraform output -raw resource_group_name)" >> $GITHUB_OUTPUT
+        echo "cluster_name=$(terraform output -raw kubernetes_cluster_name)" >> $GITHUB_OUTPUT
+        echo "acr_login_server=$(terraform output -raw acr_login_server)" >> $GITHUB_OUTPUT
         
         # Salvar kubeconfig
         mkdir -p ~/.kube
@@ -72,7 +72,15 @@ jobs:
         KUBE_CONFIG_B64=$(base64 -w 0 ~/.kube/config)
         echo "KUBE_CONFIG=$KUBE_CONFIG_B64" >> $GITHUB_ENV
         
-    - name: Create GitHub Secrets
+        # Obter credenciais do ACR
+        ACR_USERNAME=$(terraform output -raw acr_admin_username)
+        ACR_PASSWORD=$(terraform output -raw acr_admin_password)
+        
+        # Exportar para uso nos próximos steps
+        echo "ACR_USERNAME=$ACR_USERNAME" >> $GITHUB_ENV
+        echo "ACR_PASSWORD=$ACR_PASSWORD" >> $GITHUB_ENV
+        
+    - name: Create KUBE_CONFIG Secret
       uses: gliech/create-github-secret-action@v1
       if: github.ref == 'refs/heads/main'
       with:
@@ -80,26 +88,26 @@ jobs:
         value: ${{ env.KUBE_CONFIG }}
         pa_token: ${{ secrets.GH_PA_TOKEN }}
         
-    - name: Create ACR Secret
+    - name: Create ACR_USERNAME Secret
       uses: gliech/create-github-secret-action@v1
       if: github.ref == 'refs/heads/main'
-      run: |
-        cd terraform
-        ACR_USERNAME=$(terraform output -raw acr_admin_username)
-        ACR_PASSWORD=$(terraform output -raw acr_admin_password)
-        
-        # Salvar como segredos do GitHub
-        echo "ACR_USERNAME=$ACR_USERNAME" >> $GITHUB_ENV
-        echo "ACR_PASSWORD=$ACR_PASSWORD" >> $GITHUB_ENV
       with:
         name: ACR_USERNAME
         value: ${{ env.ACR_USERNAME }}
         pa_token: ${{ secrets.GH_PA_TOKEN }}
         
-    - name: Create ACR Password Secret
+    - name: Create ACR_PASSWORD Secret
       uses: gliech/create-github-secret-action@v1
       if: github.ref == 'refs/heads/main'
       with:
         name: ACR_PASSWORD
         value: ${{ env.ACR_PASSWORD }}
+        pa_token: ${{ secrets.GH_PA_TOKEN }}
+        
+    - name: Create ACR_LOGIN_SERVER Secret
+      uses: gliech/create-github-secret-action@v1
+      if: github.ref == 'refs/heads/main'
+      with:
+        name: ACR_LOGIN_SERVER
+        value: ${{ env.acr_login_server }}
         pa_token: ${{ secrets.GH_PA_TOKEN }}
