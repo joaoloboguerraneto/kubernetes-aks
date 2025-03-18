@@ -72,7 +72,7 @@ variable "ssh_public_key" {
 variable "subnet_id" {
   description = "ID da subnet onde o AKS será implantado"
   type        = string
-  default     = "Servidor01-vnet"
+  default     = "de4f3e91-6d47-436a-953d-754e9ac52434"
 }
 
 variable "service_cidr" {
